@@ -4,7 +4,8 @@
 #include "Framework/Input.h"
 #include <string>
 #include <iostream>
-
+#include "Framework/TileMap.h"
+#include "TileMapTest.h"
 
 class Level{
 public:
@@ -23,4 +24,6 @@ private:
 	// Default variables for level class.
 	sf::RenderWindow* window;
 	Input* input;
+
+	TileMapTest level;
 };
