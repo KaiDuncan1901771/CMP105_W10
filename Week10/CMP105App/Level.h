@@ -6,6 +6,7 @@
 #include <iostream>
 #include "Framework/TileMap.h"
 #include "TileMapTest.h"
+#include "Player.h"
 
 class Level{
 public:
@@ -26,4 +27,7 @@ private:
 	Input* input;
 
 	TileMapTest level;
+	Player player;
+
+	sf::Texture playerTexture;
 };

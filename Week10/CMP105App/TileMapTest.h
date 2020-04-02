@@ -1,6 +1,8 @@
 #pragma once
 #include "Framework/TileMap.h"
-class TileMapTest
+#include "Framework/GameObject.h"
+#include  "Player.h"
+class TileMapTest: public GameObject, public Player
 {
 public:
 	TileMapTest();
@@ -8,9 +10,14 @@ public:
 
 	void setMap();
 	void render(sf::RenderWindow* window);
+	void collisionCheck(Player& player);
+	TileMap tileMap;
+
+
 private:
 
+	
 protected:
-	TileMap tileMap;
+	
 };
 

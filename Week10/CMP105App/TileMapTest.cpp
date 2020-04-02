@@ -24,6 +24,7 @@ TileMapTest::TileMapTest()
 	tiles[6].setTextureRect(sf::IntRect(34, 34, 16, 16));
 
 	tileMap.setTileSet(tiles);
+
 }
 
 TileMapTest::~TileMapTest()
@@ -33,24 +34,47 @@ TileMapTest::~TileMapTest()
 
 void TileMapTest::setMap()
 {
-	sf::Vector2u mapSize(10, 6);
+	sf::Vector2u mapSize(28, 8);
 
 	//build map
 	std::vector<int> map = {
-		1, 3, 0, 0, 0, 0, 0, 0, 0, 0,
-		4, 6, 1, 3, 0, 0, 0, 0, 0, 0,
-		0, 0, 4, 6, 1, 3, 0, 0, 0, 0,
-		0, 0, 0, 0, 4, 6, 1, 3, 0, 0,
-		0, 0, 0, 0, 0, 0, 4, 6, 1, 3,
-		0, 0, 0, 0, 0, 0, 0, 0, 4, 6
+		1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		4, 6, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 4, 6, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 4, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3,
+		0, 0, 0, 0, 0, 0, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6,
+		0, 0, 0, 0, 0, 0, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6,
+		0, 0, 0, 0, 0, 0, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6
 	};
 
 	tileMap.setTileMap(map, mapSize);
 	tileMap.setPosition(sf::Vector2f(0, 408));
 	tileMap.buildLevel();
+
+
+
+
+
 }
 
 void TileMapTest::render(sf::RenderWindow* window)
 {
 	tileMap.render(window);
+}
+
+void TileMapTest::collisionCheck(Player& player)
+{
+	std::vector<GameObject>* world = tileMap.getLevel();
+	for (int i = 0; i < (int)world->size(); i++)
+	{
+		//if collision check should occur
+		if ((*world)[i].isCollider())
+		{
+			if (Collision::checkBoundingBox(&player, &(*world)[i]))
+			{
+				player.collisionResponse(&(*world)[i]);
+			}
+		}
+	}
 }
