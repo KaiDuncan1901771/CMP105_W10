@@ -23,5 +23,6 @@ private:
 	sf::Vector2f jumpVector;
 	bool isJumping;
 	bool isGravityOn;
+	bool canPlayerMove;
 };
 

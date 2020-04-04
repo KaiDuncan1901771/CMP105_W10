@@ -9,6 +9,7 @@ Player::Player()
 	isJumping = false;
 	velocity = sf::Vector2f(150, 0);
 	isGravityOn = true;
+	canPlayerMove = true;
 }
 
 Player::~Player()
@@ -23,6 +24,7 @@ void Player::update(float dt)
 		sf::Vector2f pos = stepVelocity * dt + 0.5f * gravity * dt * dt;
 		stepVelocity += gravity * dt;
 		setPosition(getPosition() + pos);
+		isJumping = true;
 	}
 
 	if (isCollider() == false)
@@ -33,32 +35,56 @@ void Player::update(float dt)
 
 void Player::handleInput(float dt)
 {
-	if (input->isKeyDown(sf::Keyboard::Space))
+	if (canPlayerMove == true)
 	{
-		if (!isJumping)
+		if (input->isKeyDown(sf::Keyboard::Space))
 		{
-			stepVelocity = jumpVector;
-			isJumping = true;
-			isGravityOn = true;
+			if (!isJumping)
+			{
+				stepVelocity = jumpVector;
+				isJumping = true;
+				isGravityOn = true;
+				canPlayerMove = true;
+			}
 		}
-	}
-	if (input->isKeyDown(sf::Keyboard::A))
-	{
-		move(-velocity * dt);
-	}
-	if (input->isKeyDown(sf::Keyboard::D))
-	{
-		move(velocity * dt);
+		if (input->isKeyDown(sf::Keyboard::A))
+		{
+			move(-velocity * dt);
+		}
+		if (input->isKeyDown(sf::Keyboard::D))
+		{
+			move(velocity * dt);
+		}
 	}
 }
 
 void Player::collisionResponse(GameObject* collider)
 {
-	velocity.y = 0;
-	setPosition(getPosition().x, collider->getPosition().y - getSize().y);
-	isJumping = false;
-	isGravityOn = false;
-
 	float diffX = (collider->getPosition().x + (collider->getSize().x / 2)) - (getPosition().x + (getSize().x / 2));
 	float diffY = (collider->getPosition().y + (collider->getSize().y / 2)) - (getPosition().y + (getSize().y / 2));
+
+	if (abs(diffX) > abs(diffY))
+	{
+		if (abs(diffX < 0))
+		{ //Right side collision
+			setPosition(collider->getPosition().x + collider->getSize().x + 0.25f, getPosition().y);
+			canPlayerMove = false;
+
+		}
+		else
+		{  //Left side collision
+			setPosition(collider->getPosition().x - getSize().x - 0.25f, getPosition().y);
+			canPlayerMove = false;
+
+		}
+	}
+	else 
+	{
+	//	std::cout << "Y-axis collision";
+		velocity.y = 0;
+		setPosition(getPosition().x, collider->getPosition().y - getSize().y);
+		isGravityOn = false;
+	    isJumping = false;
+		canPlayerMove = true;
+	}
 }
