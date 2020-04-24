@@ -10,7 +10,7 @@ public:
 
 	void setMap();
 	void render(sf::RenderWindow* window);
-	void collisionCheck(Player& player);
+	void collisionCheck(Player& player2);
 	TileMap tileMap;
 
 
